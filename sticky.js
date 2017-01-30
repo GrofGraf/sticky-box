@@ -1,26 +1,35 @@
 var frame = document.getElementById("frame");
 var sticker = document.getElementById("sticker");
 if(frame){
-	var frameTop = frame.getBoundingClientRect().top + window.pageYOffset;
-	var frameBottom = frame.getBoundingClientRect().bottom + window.pageYOffset;
-	var frameHeight = frame.getBoundingClientRect().height;
-	console.log(frameTop);
-	console.log(frameBottom);
-	console.log(frameHeight);
-	
-	if(frameHeight>=window.innerHeight){
-		sticker.style.height = window.innerHeight+"px";
-	}
-	console.log(window.pageYOffset, document.documentElement.scrollTop)
-	document.onscroll = function(){
-		var windowTop  = window.pageYOffset || document.documentElement.scrollTop;
-		if(windowTop > frameTop){
-			sticker.style="position:fixed;top:0;height:" + sticker.style.height;
+	function initSticky(){
+		var frameTop = frame.getBoundingClientRect().top + window.pageYOffset;
+		var frameBottom = frame.getBoundingClientRect().bottom + window.pageYOffset;
+		var frameHeight = frame.getBoundingClientRect().height;
+		setStickyPosition(frameTop, frameBottom, sticker);
+		if(frameHeight>=window.innerHeight){
+			sticker.style.height = window.innerHeight+"px";
+			document.onscroll = function(){
+				setStickyPosition(frameTop, frameBottom, sticker);
+			}
 		}else{
-			sticker.style="position:absolute;top:0;height:" + sticker.style.height;
+			sticker.style = null;
+			document.onscroll = null;
 		}
-		if(windowTop + window.innerHeight > frameBottom){
-			sticker.style="position:absolute;bottom:0;height:" + sticker.style.height;
-		}
+	}
+	window.onresize = function(event){
+		initSticky();
+	}
+	initSticky();
+}
+
+function setStickyPosition(top, bottom, sticker){
+	var windowTop  = window.pageYOffset || document.documentElement.scrollTop;
+	if(windowTop > top){
+		sticker.style="position:fixed;top:0;height:" + sticker.style.height;
+	}else{
+		sticker.style="position:absolute;top:0;height:" + sticker.style.height;
+	}
+	if(windowTop + window.innerHeight > bottom){
+		sticker.style="position:absolute;bottom:0;height:" + sticker.style.height;
 	}
 }
