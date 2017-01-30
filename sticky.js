@@ -12,7 +12,7 @@ if(frame){
 				setStickyPosition(frameTop, frameBottom, sticker);
 			}
 		}else{
-			sticker.style = null;
+			sticker.style="position:absolute;top:0;height:100%;";
 			document.onscroll = null;
 		}
 	}
