@@ -2,19 +2,9 @@ var frame = document.getElementById("frame");
 var sticker = document.getElementById("sticker");
 if(frame){
 	function initSticky(){
-		var frameTop = frame.getBoundingClientRect().top + window.pageYOffset;
-		var frameBottom = frame.getBoundingClientRect().bottom + window.pageYOffset;
-		var frameHeight = frame.getBoundingClientRect().height;
-		setStickyPosition(frameTop, frameBottom, sticker);
-		if(frameHeight>=window.innerHeight){
-			sticker.style.height = window.innerHeight+"px";
-			document.onscroll = function(){
-				setStickyPosition(frameTop, frameBottom, sticker);
-			}
-		}else{
-			sticker.style="position:absolute;top:0;height:100%;";
-			document.onscroll = null;
-		}
+		setStickyPosition();
+		document.addEventListener("scroll", setStickyPosition);
+		document.addEventListener("touchmove", setStickyPosition);
 	}
 	window.onresize = function(event){
 		initSticky();
@@ -22,14 +12,24 @@ if(frame){
 	initSticky();
 }
 
-function setStickyPosition(top, bottom, sticker){
+function setStickyPosition(){
 	var windowTop  = window.pageYOffset || document.documentElement.scrollTop;
-	if(windowTop > top){
-		sticker.style="position:fixed;top:0;height:" + sticker.style.height;
+	var frameTop = frame.getBoundingClientRect().top + window.pageYOffset;
+	var frameBottom = frame.getBoundingClientRect().bottom + window.pageYOffset;
+	var frameHeight = frame.getBoundingClientRect().height;
+	if(frameHeight >= window.innerHeight){
+		sticker.style.height = window.innerHeight+"px";
+		if(windowTop > frameTop){
+			sticker.style="position:fixed;top:0;height:" + sticker.style.height;
+		}else{
+			sticker.style="position:absolute;top:0;height:" + sticker.style.height;
+		}
+		if(windowTop + window.innerHeight > frameBottom){
+			sticker.style="position:absolute;bottom:0;height:" + sticker.style.height;
+		}
 	}else{
-		sticker.style="position:absolute;top:0;height:" + sticker.style.height;
-	}
-	if(windowTop + window.innerHeight > bottom){
-		sticker.style="position:absolute;bottom:0;height:" + sticker.style.height;
+		sticker.style = "position:absolute;top:0;height:100%;";
+		document.removeEventListener("scroll", setStickyPosition);
+		document.removeEventListener("touchmove", setStickyPosition);
 	}
 }
