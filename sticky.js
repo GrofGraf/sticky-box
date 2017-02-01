@@ -13,18 +13,18 @@ if(frame){
 }
 
 function setStickyPosition(){
-	var windowTop  = window.pageYOffset || document.documentElement.scrollTop;
-	var frameTop = frame.getBoundingClientRect().top + window.pageYOffset;
-	var frameBottom = frame.getBoundingClientRect().bottom + window.pageYOffset;
+	var position  = window.pageYOffset || document.body.scrollTop;
+	var frameTop = frame.getBoundingClientRect().top + position;
+	var frameBottom = frame.getBoundingClientRect().bottom + position;
 	var frameHeight = frame.getBoundingClientRect().height;
 	if(frameHeight >= window.innerHeight){
 		sticker.style.height = window.innerHeight+"px";
-		if(windowTop > frameTop){
+		if(position >= frameTop){
 			sticker.style="position:fixed;top:0;height:" + sticker.style.height;
 		}else{
 			sticker.style="position:absolute;top:0;height:" + sticker.style.height;
 		}
-		if(windowTop + window.innerHeight > frameBottom){
+		if(position + window.innerHeight > frameBottom){
 			sticker.style="position:absolute;bottom:0;height:" + sticker.style.height;
 		}
 	}else{
