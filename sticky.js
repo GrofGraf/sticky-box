@@ -1,15 +1,8 @@
 var frame = document.getElementById("frame");
 var sticker = document.getElementById("sticker");
 if(frame){
-	function initSticky(){
-		setStickyPosition();
-		document.addEventListener("scroll", setStickyPosition);
-		document.addEventListener("touchmove", setStickyPosition);
-	}
-	window.onresize = function(event){
-		initSticky();
-	}
 	initSticky();
+	window.addEventListener("resize", initSticky)
 }
 
 function setStickyPosition(){
@@ -33,3 +26,9 @@ function setStickyPosition(){
 		document.removeEventListener("touchmove", setStickyPosition);
 	}
 }
+
+function initSticky(){
+		setStickyPosition();
+		document.addEventListener("scroll", setStickyPosition);
+		document.addEventListener("touchmove", setStickyPosition);
+	}
